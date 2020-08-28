@@ -1,0 +1,173 @@
+
+<div class="example-container">
+  <h2>To do</h2>
+  <div
+  cdkDropList
+  cdkDrag
+  cdkDropListConnectedTo="drop-list"
+  class="example-list"
+  *ngFor="let item of types"
+  [cdkDragData]="item"
+  (cdkDragStarted)="dragStart($event)"
+  (cdkDragMoved)="moved($event)">
+    <div class="example-box">
+      {{item.name}}
+    </div>
+  </div>
+</div>
+
+<div class="example-container">
+  <h2>Done</h2>
+  <div
+  cdkDropList
+  id="drop-list"
+  class="example-list"
+  (cdkDropListDropped)="itemDropped($event)">
+  <div *ngFor="let field of fields; let i=index;" class="example-box" cdkDrag>
+  {{field.name}}
+  <button type="button" (click)="openModal(i);" >Edit</button>
+  <button type="button" (click)="removeField(i);" >Remove</button>
+  </div>
+</div>
+</div>
+
+<!-- <button (click)="test()" >save</button> -->
+
+<div *ngIf="field.length" >
+  <div *ngFor="let item of field; let i=index">
+    <!-- <div *ngIf="modalIndex === i ? true : false" > -->
+      <div *ngIf="item.name === 'Text Box'" >
+        <label> {{item.label}}
+          <input [type]="item.type" [placeholder]="item.placeholder">
+        </label>
+      </div>
+    <!-- </div> -->
+    <div *ngIf="item.name === 'Select'">
+      <label> {{item.label}}
+        <select >
+          <option selected>{{item.placeholder}}</option>
+          <option *ngFor="let opt of item.option" > {{opt.option}} </option>
+        </select>
+      </label>
+    </div>
+    <div *ngIf="item.name === 'Check Box'">
+      <label> {{item.label}}
+        <div *ngFor="let opt of item.option" >
+          <input [type]="item.type"> {{opt.option}}
+        </div>
+      </label>
+    </div>
+  </div>
+</div>
+
+<ng-template #dynamicForm>
+  <div class="modal-header">
+    <button type="button" class="close" (click)="close();" data-dismiss="modal" aria-label="Close">
+      close
+    </button>
+  </div>
+  <div class="modal-body">
+    <div>
+      <label>label
+        <input type="text" [(ngModel)]="fields[modalIndex].label">
+      </label>
+    </div>
+    <div>
+      <label>placeholder
+       <input type="text" [(ngModel)]="fields[modalIndex].placeholder">
+      </label>
+    </div>
+    <div>
+      <label>label
+      <select [(ngModel)]="fields[modalIndex].type">
+        <option>text</option>
+        <option>date</option>
+      </select>
+    </label>
+    </div>
+    <div>
+      <button type="button" (click)="submitMethod();" >Save</button>
+    </div>
+  </div>
+  <div>
+    <label> {{fields[modalIndex].label}}
+      <input [type]="fields[modalIndex].type" [placeholder]="fields[modalIndex].placeholder">
+    </label>
+  </div>
+</ng-template>
+
+<ng-template #selectBox>
+  <div class="modal-header">
+    <button type="button" class="close" (click)="close();" data-dismiss="modal" aria-label="Close">
+      close
+    </button>
+  </div>
+  <div class="modal-body">
+    <div>
+      <label>label
+        <input type="text" [(ngModel)]="fields[modalIndex].label">
+      </label>
+    </div>
+    <div>
+      <label>placeholder
+       <input type="text" [(ngModel)]="fields[modalIndex].placeholder">
+      </label>
+    </div>
+    <div>
+      <label>Option</label>
+      <div *ngFor="let item of fields[modalIndex].option; let i=index">
+        <input type="text" [(ngModel)]="item.option">
+        <button type="button" *ngIf="i !== 0" (click)="removeOptionMethod(i);">
+          remove
+        </button>
+      </div>
+      <button type="button" (click)="addOptionMethod();">Add Another Option</button>
+    </div>
+    <div>
+      <button type="button" (click)="submitMethod();">Save</button>
+    </div>
+  </div>
+  <div>
+    <label> {{fields[modalIndex].label}}
+      <select >
+        <option selected>{{fields[modalIndex].placeholder}}</option>
+        <option *ngFor="let opt of fields[modalIndex].option" > {{opt.option}} </option>
+      </select>
+    </label>
+  </div>
+</ng-template>
+
+<ng-template #checkBox>
+  <div class="modal-header">
+    <button type="button" class="close" (click)="close();" data-dismiss="modal" aria-label="Close">
+      close
+    </button>
+  </div>
+  <div class="modal-body">
+    <div>
+      <label> label
+        <input type="text" [(ngModel)]="fields[modalIndex].label">
+      </label>
+    </div>
+    <div>
+      <label>Option</label>
+      <div *ngFor="let item of fields[modalIndex].option; let i=index">
+        <input type="text" [(ngModel)]="item.option">
+        <button type="button" *ngIf="i !== 0" (click)="removeOptionMethod(i);">
+          remove
+        </button>
+      </div>
+      <button type="button" (click)="addOptionMethod();">Add Another Option</button>
+    </div>
+    <div>
+      <button type="button" (click)="submitMethod();">Save</button>
+    </div>
+  </div>
+  <div>
+    <label> {{fields[modalIndex].label}}
+      <div *ngFor="let item of fields[modalIndex].option" >
+        <input [type]="fields[modalIndex].type"> {{item.option}}
+      </div>
+    </label>
+  </div>
+</ng-template>
